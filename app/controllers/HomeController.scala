@@ -56,6 +56,20 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     val r: Result = Ok(Json.toJson(recipeData))
     r
   }
-
+  def showAllAbcdef(pageId: String) = Action {implicit request =>
+    // we are connecting to our website while passing the URL as a string
+    val htmlDocument = Jsoup.connect(s"${sourceUrl}/thu-vien/cong-thuc-nau-an&page=${pageId}").get()
+    //  let’s extract some specific elements from the raw HTML
+    val recipesDomElements = htmlDocument.select("div.container .row").asScala
+    // To extract specific elements from a single recipe, use the following:
+    val recipeData = for(recipeElement <- recipesDomElements)
+      yield Recipe(
+        recipeElement.select(".box_wmid .txt_boxmid a").html(),
+        sourceUrl + recipeElement.select(".txt_boxmid a").attr("href"),
+        recipeElement.select("img").attr("src")
+      )
+    val r: Result = Ok(Json.toJson(recipeData))
+    r
+  }
 
 }
