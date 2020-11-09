@@ -50,7 +50,7 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     // To extract specific elements from a single recipe, use the following:
     val recipeData = for(recipeElement <- recipesDomElements)
       yield Recipe(
-        recipeElement.select(".box_wmid .txt_boxmid a").html(),
+        recipeElement.select(".box_wmid a").html(),
         sourceUrl + recipeElement.select(".txt_boxmid a").attr("href"),
         recipeElement.select("img").attr("src")
       )
